@@ -24,7 +24,7 @@
     (setq-local dot_ (* (nth num v1) (nth num v2)))
     (setq-local dot (+ dot dot_ ))
     )
-  dot 
+  dot
   )
 
 
@@ -81,11 +81,33 @@ test
 	      (perceptron-bias perceptron) ) )
   )
 
+(defun nm-grad-w (perceptron y)
+  "Calculate Gradients of Weights"
+  (let ((pred (nm-fwd-pass perceptron )))
+
+    (nm-scalar-matmul (- (* (- pred y) (* pred (- 1 pred ))))
+		      (perceptron-weights perceptron))
+  ))
+
+(defun nm-grad-b (perceptron y)
+  "Calculate Gradients of Bias"
+  (let ((pred (nm-fwd-pass perceptron ) ))
+    (- (* (- pred y) (* pred (- 1 pred))))
+  )
+  )
+
+(defun train()
+  "Train the Perceptron for n epochs"
+
+  )
 
 (nm-init test)
 test
 
 (nm-fwd-pass test)
+(nm-grad-w test 3)
+
+(nm-grad-b test 3)
 
 (provide 'neuralmacs)
 
