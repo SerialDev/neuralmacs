@@ -53,11 +53,6 @@
 	       (input 0.0)
 	       actual-output weights bias epochs )
 
-(setq test (perceptron-create :input (make-list 10 0)))
-
-(setf (perceptron-bias test) 2)
-
-test
 
 (defun nm-init (perceptron)
   (setf (perceptron-bias perceptron) 0.0)
@@ -70,20 +65,20 @@ test
   )
 
 (defun nm-sigmoid(x)
-  "Sigmoid Activation"
+  "Sigmoid Activation : f(x) = 1 / (1 + e^(-x))"
   (/ 1.0 (+ 1.0 (exp (- x))))
   )
 
-(defun nm-fwd-pass(perceptron)
+(defun nm-fwd-pass(perceptron inputs)
   (sigmoid( + (nm-dot
 	   (perceptron-weights perceptron)
-	   (perceptron-input perceptron))
+	   inputs)
 	      (perceptron-bias perceptron) ) )
   )
 
 (defun nm-grad-w (perceptron y)
   "Calculate Gradients of Weights"
-  (let ((pred (nm-fwd-pass perceptron )))
+  (let ((pred (nm-fwd-pass perceptron (perceptron-weights perceptron) )))
 
     (nm-scalar-matmul (- (* (- pred y) (* pred (- 1 pred ))))
 		      (perceptron-weights perceptron))
@@ -91,20 +86,25 @@ test
 
 (defun nm-grad-b (perceptron y)
   "Calculate Gradients of Bias"
-  (let ((pred (nm-fwd-pass perceptron ) ))
-    (- (* (- pred y) (* pred (- 1 pred))))
-  )
-  )
+  (let ((pred (nm-fwd-pass perceptron (perceptron-input perceptron) ) ))
+    (- (* (- pred y) (* pred (- 1 pred))))))
 
 (defun train()
   "Train the Perceptron for n epochs"
 
   )
 
+
+
+(setq test (perceptron-create :input (make-list 3 0)))
+(setf (perceptron-bias test) 2)
+
 (nm-init test)
+
 test
 
-(nm-fwd-pass test)
+(nm-fwd-pass test '(1 2 3 4))
+
 (nm-grad-w test 3)
 
 (nm-grad-b test 3)
